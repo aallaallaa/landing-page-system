@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>광고 전용 특별 혜택</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f8f8f8; color: #222; }
+    #loading { display: flex; align-items: center; justify-content: center; height: 100vh; font-size: 16px; color: #888; }
+    #landing { display: none; max-width: 600px; margin: 0 auto; padding: 20px; }
+    .badge { display: inline-block; background: #ff3b30; color: white; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+    .product-img { width: 100%; border-radius: 12px; margin-bottom: 24px; background: #e0e0e0; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 14px; }
+    .product-img img { width: 100%; border-radius: 12px; display: block; }
+    h1 { font-size: 22px; font-weight: 700; line-height: 1.4; margin-bottom: 8px; }
+    .desc { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 24px; }
+    .price-box { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .original-price { font-size: 15px; color: #aaa; text-decoration: line-through; margin-bottom: 4px; }
+    .discount-badge { display: inline-block; background: #fff0f0; color: #ff3b30; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; }
+    .discount-price { font-size: 32px; font-weight: 800; color: #ff3b30; }
+    .discount-price span { font-size: 18px; }
+    .notice { font-size: 12px; color: #aaa; margin-top: 8px; }
+    .buy-btn { display: block; width: 100%; background: #ff3b30; color: white; font-size: 18px; font-weight: 700; padding: 18px; border-radius: 12px; text-align: center; text-decoration: none; margin-bottom: 12px; transition: background 0.2s; }
+    .buy-btn:hover { background: #e02d23; }
+    .sub-notice { font-size: 12px; color: #aaa; text-align: center; }
+  </style>
+</head>
+<body>
+<div id="loading">잠시만 기다려주세요...</div>
+<div id="landing">
+  <div style="padding-top: 20px;">
+    <span class="badge">광고 전용 특별가</span>
+    <div class="product-img">
+      <!-- 상품 이미지: <img src="이미지URL" alt="상품 이미지"> -->
+      상품 이미지
+    </div>
+    <h1>상품명을 여기에 입력하세요</h1>
+    <p class="desc">상품 설명을 여기에 입력하세요.<br>광고를 통해 들어오신 분들께만 제공되는 특별 혜택입니다.</p>
+    <div class="price-box">
+      <div class="original-price">정가 000,000원</div>
+      <div class="discount-badge">00% 할인</div>
+      <div class="discount-price"><span>&#8361;</span> 000,000</div>
+      <div class="notice">* 이 페이지를 통해 구매 시에만 적용되는 특별가입니다</div>
+    </div>
+    <a class="buy-btn" href="https://baylab.store/상품페이지URL">지금 구매하기</a>
+    <p class="sub-notice">이 페이지는 광고를 통해 방문하신 분들께만 제공됩니다</p>
+  </div>
+</div>
+<script>
+  const HOME_URL = 'https://baylab.store/'
+  async function checkToken() {
+    const params = new URLSearchParams(window.location.search)
+    const token = params.get('token')
+    if (!token) { window.location.href = HOME_URL; return }
+    try {
+      const res = await fetch('/api/check-token?token=' + token)
+      const data = await res.json()
+      if (data.valid) {
+        document.getElementById('loading').style.display = 'none'
+        document.getElementById('landing').style.display = 'block'
+      } else {
+        window.location.href = HOME_URL
+      }
+    } catch (e) { window.location.href = HOME_URL }
+  }
+  checkToken()
+</script>
+</body>
+</html>
